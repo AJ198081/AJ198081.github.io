@@ -13,10 +13,12 @@ export type BackendOperation = BackendPath[keyof BackendPath];
 export type BackendResponse<T> = T extends BackendOperation ? Awaited<ReturnType<T>> : never;
 
 
+const jwtToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhal9hZG1pbiIsImF1dGhvcml0aWVzIjpbIlJPTEVfQURNSU4iXSwiaWF0IjoxNzY2OTU2MDYwLCJleHAiOjE3NjcwNDI0NjB9.tkZ_F7-oOWlPLBJeYfDs04w6fSM6_7kEGGT8mm58s2d8PVIdX5tk82YAIYyxzw7gfxeGQrnykSnMCNS5yOgF3A";
+
 backendClient.interceptors.request.use(config => {
     config.headers.set(
-        'Authorization', `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwaGlsIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3NjM5NjkzMDMsImV4cCI6MTc2NDA1NTcwM30.Y414VmCEcfjG1tA9ldBuK83DY4QpryYbhdd7YkIsEfP-IhJY4jdIs7g8F-OGnII4a8jcoyTJOG7-l4yKmYcSrg`
-);
+        'Authorization', `Bearer ${jwtToken}`
+    );
     return config;
 });
 

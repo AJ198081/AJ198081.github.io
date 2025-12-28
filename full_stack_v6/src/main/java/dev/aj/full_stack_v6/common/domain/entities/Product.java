@@ -58,6 +58,7 @@ public class Product {
     private String name;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(255)")
+    @NotNull
     private String description;
 
     @Column(nullable = false)
@@ -102,6 +103,7 @@ public class Product {
 
     @Version
     @JdbcTypeCode(SqlTypes.INTEGER)
+    @NotNull
     private Integer version;
 
     @Embedded
