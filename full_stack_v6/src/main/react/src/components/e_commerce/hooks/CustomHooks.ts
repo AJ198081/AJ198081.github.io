@@ -3,7 +3,8 @@ import {useEffect, useState} from "react";
 import type {AxiosError} from "axios";
 import backendClient from "../../../api-client/BackendClient.tsx";
 import type {components} from "../types/schema";
-import {useCategoriesQuery} from "../services/query-services/QueryWrappers.ts";
+import {useQuery} from "@tanstack/react-query";
+import {useAllCategoriesQueryOptions} from "../services/query-services/QueryOptions.ts";
 
 export function useFetchApi<T>(url: string): ApiResponse<T> {
 
@@ -40,7 +41,11 @@ export const useAllProducts = () => {
 }
 
 export const useCategories = () => {
-    const {data, isLoading, isError, error} = useCategoriesQuery();
+    const {data, isLoading, isError, error} = useQuery(useAllCategoriesQueryOptions());
+
+    if (!isLoading && !isError) {
+        data && data.sort((a, b) => a.name.localeCompare(b.name));
+    }
 
     return {
         categories: data,

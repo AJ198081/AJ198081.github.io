@@ -17,8 +17,8 @@ export const useAllCategoriesQueryOptions = (queryKey: [string] = [DEFAULT_ALL_C
     queryOptions({
         queryKey: queryKey,
         queryFn: allCategoriesPromise,
-        staleTime: 60 * 100,
-        gcTime: 600 * 100,
+        staleTime: 60 * 1000,
+        gcTime: 600 * 1000,
         refetchOnWindowFocus: false
     })
 );
