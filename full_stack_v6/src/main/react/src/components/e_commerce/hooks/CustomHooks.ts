@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import type {AxiosError} from "axios";
 import backendClient from "../../../api-client/BackendClient.tsx";
 import type {components} from "../types/schema";
+import {useCategoriesQuery} from "../services/query-services/QueryWrappers.ts";
 
 export function useFetchApi<T>(url: string): ApiResponse<T> {
 
@@ -37,3 +38,14 @@ export function useFetchApi<T>(url: string): ApiResponse<T> {
 export const useAllProducts = () => {
     return useFetchApi<components["schemas"]["Product"][]>(import.meta.env.VITE_PRODUCT_API_PATH + '/all');
 }
+
+export const useCategories = () => {
+    const {data, isLoading, isError, error} = useCategoriesQuery();
+
+    return {
+        categories: data,
+        isLoading,
+        isError,
+        error
+    };
+};

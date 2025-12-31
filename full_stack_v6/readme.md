@@ -3,6 +3,9 @@ Full Stack V6 – Local Setup and API Test Guide
 API Contract
 - https://aj198081.github.io/full_stack_v6/src/main/resources/api-specs
 
+Generate Local Tokens
+- http://localhost:11000/swagger-ui/index.html#/AuthN/login
+
 This guide walks you through running the full_stack_v6 app locally, including its dependencies execute the API tests.
 
 Prerequisites
@@ -33,7 +36,7 @@ The Config Server lives in the config_server module and fetches configuration fr
   - Module: config_server
   - Port: 8012
   - Git Repo: https://github.com/AJ198081/config_server
-  - Env vars used: GIT_USERNAME, GIT_PASSWORD
+  - Env vars used: GIT_USERNAME, GIT_PASSWORD (Use IntelliJ's Environment Variables in Configuration)
 
 Tip: Keep the Config Server running throughout local development so client apps (like full_stack_v6) can fetch configuration.
 

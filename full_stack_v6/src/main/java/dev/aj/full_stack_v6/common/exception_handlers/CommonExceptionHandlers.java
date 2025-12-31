@@ -30,6 +30,7 @@ public class CommonExceptionHandlers {
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
+    @ReturnTypeProblemDetails
     @ExceptionHandler(value = {EntityNotFoundException.class})
     public ResponseEntity<ProblemDetail> handleEntityNotFoundException(EntityNotFoundException ex) {
         HttpStatus notFound = HttpStatus.NOT_FOUND;
@@ -44,6 +45,7 @@ public class CommonExceptionHandlers {
                 .body(entityNotFoundProblemDetail);
     }
 
+    @ReturnTypeProblemDetails
     @ExceptionHandler(value = {EntityExistsException.class})
     public ResponseEntity<ProblemDetail> handleEntityExistsException(EntityExistsException ex) {
         HttpStatus conflictStatus = HttpStatus.CONFLICT;
@@ -57,6 +59,7 @@ public class CommonExceptionHandlers {
                 .body(conflictProblemDetail);
     }
 
+    @ReturnTypeProblemDetails
     @ExceptionHandler(value = {IllegalArgumentException.class})
     public ResponseEntity<ProblemDetail> handleIllegalArgumentException(IllegalArgumentException ex) {
 
@@ -72,6 +75,7 @@ public class CommonExceptionHandlers {
                 .body(badRequestProblemDetail);
     }
 
+    @ReturnTypeProblemDetails
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
     public ResponseEntity<ProblemDetail> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
 
@@ -94,6 +98,7 @@ public class CommonExceptionHandlers {
                 .body(badRequestProblemDetail);
     }
 
+    @ReturnTypeProblemDetails
     @ExceptionHandler(value = {ConstraintViolationException.class})
     public ResponseEntity<ProblemDetail> handleConstraintViolationException(ConstraintViolationException ex) {
         HttpStatus conflictStatus = HttpStatus.BAD_REQUEST;
@@ -105,6 +110,7 @@ public class CommonExceptionHandlers {
                 .body(badRequestProblemDetail);
     }
 
+    @ReturnTypeProblemDetails
     @ExceptionHandler(value = BadCredentialsException.class)
     public ResponseEntity<ProblemDetail> handleBadCredentialsException(BadCredentialsException ex) {
         HttpStatus unauthorizedStatus = HttpStatus.UNAUTHORIZED;
@@ -117,6 +123,7 @@ public class CommonExceptionHandlers {
                 .body(badRequestProblemDetail);
     }
 
+    @ReturnTypeProblemDetails
     @ExceptionHandler(value = UnauthorisedOperationException.class)
     public ResponseEntity<ProblemDetail> handleSecurityException(UnauthorisedOperationException ex, Principal principal) {
 
@@ -135,6 +142,7 @@ public class CommonExceptionHandlers {
                 .body(notAcceptableProblemDetail);
     }
 
+    @ReturnTypeProblemDetails
     @ExceptionHandler(value = {AuthorizationDeniedException.class})
     public ResponseEntity<ProblemDetail> handleAccessDeniedException(AuthorizationDeniedException ex) {
         HttpStatus forbiddenStatus = HttpStatus.FORBIDDEN;
@@ -145,6 +153,7 @@ public class CommonExceptionHandlers {
                 .body(forbiddenProblemDetail);
     }
 
+    @ReturnTypeProblemDetails
     @ExceptionHandler(value = {IllegalStateException.class})
     public ResponseEntity<ProblemDetail> handleIllegalStateException(IllegalStateException ex) {
 
@@ -158,6 +167,7 @@ public class CommonExceptionHandlers {
     }
 
     // catch all, needed because I can't use spring's problem.details.enabled property
+    @ReturnTypeProblemDetails
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<ProblemDetail> handleException(Exception ex) {
 
