@@ -5,19 +5,70 @@ import {useCategories} from "../../hooks/CustomHooks.ts";
 import {useAddProductMutation} from "../../services/query-services/QueryWrappers.ts";
 import toast from "react-hot-toast";
 
+import {schemas} from "../../types/zod_types.ts";
+
+import {createErrorMap, fromError} from 'zod-validation-error';
+import {z as zod} from "zod";
+import {capitaliseFirstLetter} from "../../utils/utilities.ts";
+
 interface ProductFormProps {
     hideModal: () => void;
 }
 
+zod.config({
+    customError: createErrorMap(),
+})
 
+const reValidateField = (name: string, value: string, validationErrors: Record<string, string>, setValidationErrors: (value: (((prevState: Record<string, string>) => Record<string, string>) | Record<string, string>)) => void) => {
+    const fieldKey = name.split('.')[0] || name;
+
+    if (validationErrors[fieldKey] || validationErrors[name]) {
+        try {
+            schemas[capitaliseFirstLetter(fieldKey) as keyof typeof schemas].parse(value);
+            setValidationErrors(prev => {
+                const updated = {...prev};
+                delete updated[name];
+                delete updated[fieldKey];
+                return updated;
+            });
+        } catch (error) {
+            const errorResponse = fromError(error);
+            setValidationErrors(prev => ({...prev, [name]: errorResponse.message}));
+        }
+    }
+}
 export const ProductForm = ({hideModal}: ProductFormProps) => {
 
     const {categories} = useCategories();
     const [product, setProduct] = useState<NewProduct>(DEFAULT_PRODUCT_VALUE);
+    const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
     const addProductMutation = useAddProductMutation();
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        try {
+            schemas.Product.parse(product);
+        } catch (error) {
+            const formattedErrors = fromError(error);
+
+            const errorsObjects = formattedErrors.details
+                .reduce((acc, detail) => {
+                    const key = detail.path[0] as string;
+                    acc[key] = detail.message;
+                    return acc;
+                }, {} as Record<string, string>);
+
+            for (let error in errorsObjects) {
+                toast(`${error}: ${errorsObjects[error]}`, {
+                    duration: 5000,
+                });
+            }
+
+            setValidationErrors(errorsObjects);
+
+            return;
+        }
 
         try {
             const data = await addProductMutation.mutateAsync(product);
@@ -38,6 +89,7 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const {name, value} = e.target;
+        reValidateField(name, value, validationErrors, setValidationErrors);
 
         if (name === 'images') {
             const input = e.target as HTMLInputElement;
@@ -54,11 +106,11 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
             setProduct(prevState => ({
                 ...prevState,
                 [name]: {name: value},
-            }))
+            }));
         } else {
             setProduct(prevState => ({
                 ...prevState,
-                [name]: value
+                [name]: Number.isNaN(+value) ? value : +value
             }));
         }
     }
@@ -99,14 +151,16 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                         </label>
                                         <input
                                             type="text"
-                                            className={`form-control is-invalid`}
+                                            className={`form-control ${validationErrors['name'] ? 'is-invalid' : ''}`}
                                             placeholder="Name..."
                                             name="name"
                                             required
                                             value={product.name}
                                             onChange={handleInputChange}
                                         />
-                                        <div className="invalid-feedback">ERROR</div>
+                                        {validationErrors['name'] && (
+                                            <div className="invalid-feedback">{validationErrors['name']}</div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -117,13 +171,16 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                     Description
                                 </label>
                                 <textarea
-                                    className="form-control"
+                                    className={`form-control ${validationErrors['description'] ? 'is-invalid' : ''}`}
                                     rows={4}
                                     placeholder="Enter product description..."
                                     name="description"
                                     value={product.description}
                                     onChange={handleInputChange}
                                 ></textarea>
+                                {validationErrors['description'] && (
+                                    <div className="invalid-feedback">{validationErrors['description']}</div>
+                                )}
                             </div>
 
                             <div className="row">
@@ -138,14 +195,15 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                             <input
                                                 type="number"
                                                 step="0.01"
-                                                className={`form-control is-invalid`}
-                                                placeholder="0.00"
+                                                className={`form-control ${validationErrors['price'] ? 'is-invalid' : ''}`}
+                                                placeholder="price..."
                                                 name="price"
-                                                min="0"
                                                 value={product.price}
                                                 onChange={handleInputChange}
                                             />
-                                            <div className="invalid-feedback">ERROR</div>
+                                            {validationErrors['price'] && (
+                                                <div className="invalid-feedback">{validationErrors['price']}</div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -157,14 +215,15 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                         </label>
                                         <input
                                             type="number"
-                                            className={`form-control is-invalid`}
+                                            className={`form-control ${validationErrors['discountedPrice'] ? 'is-invalid' : ''}`}
                                             placeholder="Discounted price..."
                                             name="discountedPrice"
                                             value={product.discountedPrice}
                                             onChange={handleInputChange}
                                         />
-
-                                        <div className="invalid-feedback">ERROR</div>
+                                        {validationErrors['discountedPrice'] && (
+                                            <div className="invalid-feedback">{validationErrors['discountedPrice']}</div>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="col-md-4">
@@ -175,14 +234,16 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                         </label>
                                         <input
                                             type="number"
-                                            className={`form-control is-invalid`}
+                                            className={`form-control ${validationErrors['stock'] ? 'is-invalid' : ''}`}
                                             placeholder="0"
                                             name="stock"
                                             min="0"
                                             value={product.stock}
                                             onChange={handleInputChange}
                                         />
-                                        <div className="invalid-feedback">ERROR</div>
+                                        {validationErrors['stock'] && (
+                                            <div className="invalid-feedback">{validationErrors['stock']}</div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -195,9 +256,9 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                         Category *
                                     </label>
                                     <select
-                                        className="form-select"
+                                        className={`form-select ${validationErrors['category'] || validationErrors['category.name'] ? 'is-invalid' : ''}`}
                                         name="category"
-                                        value={product.category?.name}
+                                        value={product.category.name}
                                         onChange={handleInputChange}
                                         required
                                     >
@@ -209,6 +270,9 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                             >{category.name}</option>
                                         ))}
                                     </select>
+                                    {(validationErrors['category'] || validationErrors['category.name']) && (
+                                        <div className="invalid-feedback">{validationErrors['category'] || validationErrors['category.name']}</div>
+                                    )}
                                 </div>
                                 <div className="mb-3 col-md-8">
                                     <label className="form-label">
@@ -238,17 +302,18 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                 type="submit"
                                 className="btn btn-success px-4"
                             >
-                                { addProductMutation.isPending
-                                ? (<><div
-                                    className="spinner-border spinner-border-sm me-2"
-                                    role="status"
-                                >
-                                    <span className="visually-hidden">Loading...</span>
-                                </div>
-                                Adding Product...</>)
-                                : <>
-                                    <i className="bi bi-check-circle me-2"></i>
-                                Add Product</>
+                                {addProductMutation.isPending
+                                    ? (<>
+                                        <div
+                                            className="spinner-border spinner-border-sm me-2"
+                                            role="status"
+                                        >
+                                            <span className="visually-hidden">Loading...</span>
+                                        </div>
+                                        Adding Product...</>)
+                                    : <>
+                                        <i className="bi bi-check-circle me-2"></i>
+                                        Add Product</>
                                 }
                             </button>
                         </div>
@@ -256,5 +321,5 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                 </div>
             </div>
         </div>
-    )
+    );
 }

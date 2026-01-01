@@ -17,6 +17,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -55,10 +56,12 @@ public class Product {
 
     @Column(nullable = false, unique = true, columnDefinition = "VARCHAR(255)")
     @NotNull
+    @Size(min = 3, max = 255)
     private String name;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     @NotNull
+    @Size(min = 10, max = 600)
     private String description;
 
     @Column(nullable = false)
@@ -73,7 +76,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    @NotNull
+    @NotNull(message = "Must be a valid category")
     private Category category;
 
     @Builder.Default

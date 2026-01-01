@@ -17,3 +17,6 @@ https://editor.swagger.io/
    1. npx please execute openapi-TypeScript, take my specs from `location of openApi specs` and place the output from `location of schema type definition`
    2. e.g. `npx openapi-typescript ../resources/api-specs/complete_specs_v1.json -o ./domain/types.ts`
    3. `npx openapi-typescript /mnt/c/Users/amarj/IdeaProjects/spring_master/full_stack_v6/src/main/resources/api-specs/complete_specs_v1.json -o /mnt/c/Users/amarj/IdeaProjects/spring_master/full_stack_v6/src/main/react/src/components/e_commerce/types/schema.d.ts`
+
+### Generate Zod_Schema Definition
+1. https://www.npmjs.com/package/openapi-zod-client

@@ -6,6 +6,6 @@ export const DEFAULT_PRODUCT_VALUE: NewProduct = {
     price: 0.00,
     discountedPrice: undefined,
     stock: 0,
-    category: undefined,
+    category: {name: ''},
     images: [],
 }
