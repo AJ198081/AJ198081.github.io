@@ -2,6 +2,8 @@ import {type ChangeEvent, type FormEvent, useState} from "react";
 import type {NewProduct} from "../../types/types.ts";
 import {DEFAULT_PRODUCT_VALUE} from "../../types/defaultValues.ts";
 import {useCategories} from "../../hooks/CustomHooks.ts";
+import {useAddProductMutation} from "../../services/query-services/QueryWrappers.ts";
+import toast from "react-hot-toast";
 
 interface ProductFormProps {
     hideModal: () => void;
@@ -12,11 +14,25 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
 
     const {categories} = useCategories();
     const [product, setProduct] = useState<NewProduct>(DEFAULT_PRODUCT_VALUE);
+    const addProductMutation = useAddProductMutation();
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (product) {
-            console.log(product);
+
+        try {
+            const data = await addProductMutation.mutateAsync(product);
+            toast.success(
+                `${data.name} added successfully!`,
+                {
+                    toasterId: "product-added-toast",
+                    duration: 5000,
+                    position: "bottom-right"
+                }
+            );
+        } catch (e) {
+            console.log(e);
+        } finally {
+            hideModal();
         }
     }
 
@@ -25,12 +41,14 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
 
         if (name === 'images') {
             const input = e.target as HTMLInputElement;
-            const files = input.files;
-            const imageArray = files ? Array.from(files) : [];
+            const files: FileList | null = input.files;
+            const images: File[] = files
+                ? Array.from(files)
+                : [];
 
             setProduct(prevState => ({
                 ...prevState,
-                [name]: imageArray
+                [name]: images
             }));
         } else if (name === 'category') {
             setProduct(prevState => ({
@@ -138,7 +156,7 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                             Discounted Price (Optional)
                                         </label>
                                         <input
-                                            type="text"
+                                            type="number"
                                             className={`form-control is-invalid`}
                                             placeholder="Discounted price..."
                                             name="discountedPrice"
@@ -220,15 +238,18 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                 type="submit"
                                 className="btn btn-success px-4"
                             >
-                                <div
+                                { addProductMutation.isPending
+                                ? (<><div
                                     className="spinner-border spinner-border-sm me-2"
                                     role="status"
                                 >
                                     <span className="visually-hidden">Loading...</span>
                                 </div>
-                                Adding Product...
-                                <i className="bi bi-check-circle me-2"></i>
-                                Add Product
+                                Adding Product...</>)
+                                : <>
+                                    <i className="bi bi-check-circle me-2"></i>
+                                Add Product</>
+                                }
                             </button>
                         </div>
                     </form>

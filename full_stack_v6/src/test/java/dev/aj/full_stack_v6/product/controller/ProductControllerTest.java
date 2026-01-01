@@ -35,6 +35,10 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
+import org.springframework.http.MediaType;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -398,10 +402,16 @@ class ProductControllerTest {
     }
 
     private @NonNull ResponseEntity<Product> saveANewRandomProduct(Product newProduct) {
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("product", newProduct);
+        // Optionally add dummy images if needed for testing
+        // body.add("images", new MockMultipartFile(...));
+
         return productClient.post()
                 .uri("/")
                 .headers(addBearerTokenHeaders())
-                .body(newProduct)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(body)
                 .retrieve()
                 .toEntity(Product.class);
     }

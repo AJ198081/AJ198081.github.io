@@ -73,13 +73,14 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @NotNull
     private Category category;
 
     @Builder.Default
     @OneToMany(
             fetch = FetchType.LAZY,
             mappedBy = "product",
-            cascade = CascadeType.REMOVE,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE},
             orphanRemoval = true
     )
     @NotAudited
@@ -103,7 +104,6 @@ public class Product {
 
     @Version
     @JdbcTypeCode(SqlTypes.INTEGER)
-    @NotNull
     private Integer version;
 
     @Embedded

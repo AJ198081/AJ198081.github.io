@@ -3,6 +3,7 @@ package dev.aj.full_stack_v6.product.services.impl;
 import dev.aj.full_stack_v6.category.CategoryService;
 import dev.aj.full_stack_v6.clients.SellerService;
 import dev.aj.full_stack_v6.common.domain.entities.Category;
+import dev.aj.full_stack_v6.common.domain.entities.Image;
 import dev.aj.full_stack_v6.common.domain.entities.Product;
 import dev.aj.full_stack_v6.common.domain.entities.Seller;
 import dev.aj.full_stack_v6.common.domain.entities.User;
@@ -22,7 +23,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -37,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public Product saveProduct(Product product) {
+    public Product saveProduct(Product product, MultipartFile[] images) {
         log.info("Received request to save the product: {}", product.getName());
         assertProductNameUniqueness(product);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -48,6 +51,16 @@ public class ProductServiceImpl implements ProductService {
         product.setSeller(userSeller);
 
         product.setCategory(saveOrGetExistingCategory(product.getCategory()));
+
+        if (images != null && images.length > 0) {
+            Arrays.stream(images)
+                    .forEach(multipartFile -> {
+                        Image image = new Image(multipartFile);
+                        image.setProduct(product);
+                        product.getImages().add(image);
+                    });
+        }
+
         Product savedProduct = productRepository.save(product);
         log.info("Product: {} saved successfully with Product Id: {}", savedProduct.getName(), savedProduct.getId());
         return savedProduct;

@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @RestController
@@ -30,9 +33,10 @@ class ProductController {
 
     private final ProductService productService;
 
-    @PostMapping("/")
-    public ResponseEntity<Product> saveProduct(@Valid @RequestBody Product product) {
-        return ResponseEntity.ok(productService.saveProduct(product));
+    @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Product> saveProduct(@Valid @RequestPart("product") Product product,
+                                               @RequestPart(value = "images", required = false) MultipartFile[] images) {
+        return ResponseEntity.ok(productService.saveProduct(product, images));
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
