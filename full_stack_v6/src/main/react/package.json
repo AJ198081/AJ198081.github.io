@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "generate-types": "npx openapi-typescript C:/Users/amarj/IdeaProjects/spring_master/full_stack_v6/src/main/resources/api-specs/complete_specs_v2.json -o C:/Users/amarj/IdeaProjects/spring_master/full_stack_v6/src/main/react/src/components/e_commerce/types/schema.d.ts",
     "generate-zod-types": "openapi-zod-client C:/Users/amarj/IdeaProjects/spring_master/full_stack_v6/src/main/resources/api-specs/complete_specs_v2.json -o ./src/components/e_commerce/types/zod_types.ts --export-schemas=true --export-types=true --implicit-required=true --base-url=http://localhost:11000 --strict-objects=true",
-    "help-on-generate-zod-types": "openapi-zod-client --help"
+    "help-on-generate-zod-types": "openapi-zod-client --help",
+    "generate-orval-types": "orval --config orval/config.js"
   },
   "quokka": {
     "tsConfig": "./tsconfig.quokka.json"
@@ -37,9 +38,9 @@
     "react-toastify": "^11.0.5",
     "sweetalert2": "^11.26.17",
     "tailwindcss": "^4.1.18",
-    "zustand": "^5.0.9",
     "zod": "^4.3.4",
-    "zod-validation-error": "^5.0.0"
+    "zod-validation-error": "^5.0.0",
+    "zustand": "^5.0.9"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
@@ -53,10 +54,11 @@
     "eslint-plugin-react-refresh": "^0.4.26",
     "globals": "^16.5.0",
     "openapi-typescript": "^7.10.1",
+    "openapi-zod-client": "^1.18.3",
+    "orval": "^7.17.2",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.50.1",
-    "vite": "^7.3.0",
-    "openapi-zod-client": "^1.18.3"
+    "vite": "^7.3.0"
   },
   "engines": {
     "node": ">=22.12.0"

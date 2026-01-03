@@ -1,8 +1,12 @@
-import axios from "axios";
+import axios, {type AxiosRequestConfig, type AxiosResponse} from "axios";
 
 import type {operations, paths} from "../assets/schema";
 
 export const backendClient = axios.create({baseURL: `${import.meta.env.VITE_API_BASE_URL}`});
+
+export const apiClient = <T = unknown>(config: AxiosRequestConfig): Promise<AxiosResponse<T>> => {
+    return backendClient(config);
+}
 
 export type BackendPaths = paths[keyof paths];
 
@@ -25,6 +29,3 @@ backendClient.interceptors.request.use(config => {
 
 export const getAllProducts = () => backendClient
     .get<BackendResponse<operations["getAllProducts"]>>("/api/v1/products/all");
-
-
-export default backendClient;
