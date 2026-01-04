@@ -1,117 +1,34 @@
-import {type ChangeEvent, type FormEvent, useState} from "react";
 import type {NewProduct} from "../../types/types.ts";
-import {DEFAULT_PRODUCT_VALUE} from "../../types/defaultValues.ts";
 import {useCategories} from "../../hooks/CustomHooks.ts";
 import {useAddProductMutation} from "../../services/query-services/QueryWrappers.ts";
 import toast from "react-hot-toast";
-
-import {schemas} from "../../types/zod_types.ts";
-
-import {createErrorMap, fromError} from 'zod-validation-error';
-import {z as zod} from "zod";
-import {capitaliseFirstLetter} from "../../utils/utilities.ts";
+import {useForm} from "react-hook-form";
 
 interface ProductFormProps {
     hideModal: () => void;
 }
 
-zod.config({
-    customError: createErrorMap(),
-})
-
-const reValidateField = (name: string, value: string, validationErrors: Record<string, string>, setValidationErrors: (value: (((prevState: Record<string, string>) => Record<string, string>) | Record<string, string>)) => void) => {
-    const fieldKey = name.split('.')[0] || name;
-
-    if (validationErrors[fieldKey] || validationErrors[name]) {
-        try {
-            schemas[capitaliseFirstLetter(fieldKey) as keyof typeof schemas].parse(value);
-            setValidationErrors(prev => {
-                const updated = {...prev};
-                delete updated[name];
-                delete updated[fieldKey];
-                return updated;
-            });
-        } catch (error) {
-            const errorResponse = fromError(error);
-            setValidationErrors(prev => ({...prev, [name]: errorResponse.message}));
-        }
-    }
-}
 export const ProductForm = ({hideModal}: ProductFormProps) => {
 
     const {categories} = useCategories();
-    const [product, setProduct] = useState<NewProduct>(DEFAULT_PRODUCT_VALUE);
-    const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
     const addProductMutation = useAddProductMutation();
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const {register, handleSubmit: formSubmissionHandler, formState: {errors}} = useForm<NewProduct>();
 
+    const handleSubmit = async (data: NewProduct) => {
         try {
-            schemas.Product.parse(product);
-        } catch (error) {
-            const formattedErrors = fromError(error);
-
-            const errorsObjects = formattedErrors.details
-                .reduce((acc, detail) => {
-                    const key = detail.path[0] as string;
-                    acc[key] = detail.message;
-                    return acc;
-                }, {} as Record<string, string>);
-
-            for (let error in errorsObjects) {
-                toast(`${error}: ${errorsObjects[error]}`, {
-                    duration: 5000,
-                });
-            }
-
-            setValidationErrors(errorsObjects);
-
-            return;
-        }
-
-        try {
-            const data = await addProductMutation.mutateAsync(product);
+            const submittedData = await addProductMutation.mutateAsync(data);
             toast.success(
-                `${data.name} added successfully!`,
+                `${submittedData.name} added successfully!`,
                 {
                     toasterId: "product-added-toast",
                     duration: 5000,
                     position: "bottom-right"
                 }
             );
+            hideModal();
         } catch (e) {
             console.log(e);
-        } finally {
-            hideModal();
-        }
-    }
-
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const {name, value} = e.target;
-        reValidateField(name, value, validationErrors, setValidationErrors);
-
-        if (name === 'images') {
-            const input = e.target as HTMLInputElement;
-            const files: FileList | null = input.files;
-            const images: File[] = files
-                ? Array.from(files)
-                : [];
-
-            setProduct(prevState => ({
-                ...prevState,
-                [name]: images
-            }));
-        } else if (name === 'category') {
-            setProduct(prevState => ({
-                ...prevState,
-                [name]: {name: value},
-            }));
-        } else {
-            setProduct(prevState => ({
-                ...prevState,
-                [name]: Number.isNaN(+value) ? value : +value
-            }));
         }
     }
 
@@ -126,7 +43,7 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
             <div className="modal-dialog modal-lg modal-dialog-centered">
                 <div className="modal-content border-0 shadow-lg">
                     <form
-                        onSubmit={handleSubmit}
+                        onSubmit={formSubmissionHandler(handleSubmit)}
                         className="needs-validation"
                         noValidate
                     >
@@ -151,15 +68,14 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                         </label>
                                         <input
                                             type="text"
-                                            className={`form-control ${validationErrors['name'] ? 'is-invalid' : ''}`}
-                                            placeholder="Name..."
-                                            name="name"
-                                            required
-                                            value={product.name}
-                                            onChange={handleInputChange}
+                                            className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                                            placeholder="Enter product name..."
+                                            {...register("name", {
+                                                required: true,
+                                            })}
                                         />
-                                        {validationErrors['name'] && (
-                                            <div className="invalid-feedback">{validationErrors['name']}</div>
+                                        {errors.name && (
+                                            <div className="invalid-feedback">{errors.name.message}</div>
                                         )}
                                     </div>
                                 </div>
@@ -171,15 +87,15 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                     Description
                                 </label>
                                 <textarea
-                                    className={`form-control ${validationErrors['description'] ? 'is-invalid' : ''}`}
+                                    className={`form-control ${errors.description ? 'is-invalid' : ''}`}
                                     rows={4}
                                     placeholder="Enter product description..."
-                                    name="description"
-                                    value={product.description}
-                                    onChange={handleInputChange}
+                                    {...register("description", {
+                                        required: true,
+                                    })}
                                 ></textarea>
-                                {validationErrors['description'] && (
-                                    <div className="invalid-feedback">{validationErrors['description']}</div>
+                                {errors.description && (
+                                    <div className="invalid-feedback">{errors.description.message}</div>
                                 )}
                             </div>
 
@@ -195,14 +111,15 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                             <input
                                                 type="number"
                                                 step="0.01"
-                                                className={`form-control ${validationErrors['price'] ? 'is-invalid' : ''}`}
+                                                className={`form-control ${errors.price ? 'is-invalid' : ''}`}
                                                 placeholder="price..."
-                                                name="price"
-                                                value={product.price}
-                                                onChange={handleInputChange}
+                                                {...register("price", {
+                                                    required: true,
+                                                    valueAsNumber: true,
+                                                })}
                                             />
-                                            {validationErrors['price'] && (
-                                                <div className="invalid-feedback">{validationErrors['price']}</div>
+                                            {errors.price && (
+                                                <div className="invalid-feedback">{errors.price.message}</div>
                                             )}
                                         </div>
                                     </div>
@@ -215,14 +132,14 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                         </label>
                                         <input
                                             type="number"
-                                            className={`form-control ${validationErrors['discountedPrice'] ? 'is-invalid' : ''}`}
+                                            className={`form-control ${errors.discountedPrice ? 'is-invalid' : ''}`}
                                             placeholder="Discounted price..."
-                                            name="discountedPrice"
-                                            value={product.discountedPrice}
-                                            onChange={handleInputChange}
+                                            {...register("discountedPrice", {
+                                                valueAsNumber: true,
+                                            })}
                                         />
-                                        {validationErrors['discountedPrice'] && (
-                                            <div className="invalid-feedback">{validationErrors['discountedPrice']}</div>
+                                        {errors.discountedPrice && (
+                                            <div className="invalid-feedback">{errors.discountedPrice.message}</div>
                                         )}
                                     </div>
                                 </div>
@@ -234,15 +151,16 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                         </label>
                                         <input
                                             type="number"
-                                            className={`form-control ${validationErrors['stock'] ? 'is-invalid' : ''}`}
+                                            className={`form-control ${errors.stock ? 'is-invalid' : ''}`}
                                             placeholder="0"
-                                            name="stock"
                                             min="0"
-                                            value={product.stock}
-                                            onChange={handleInputChange}
+                                            {...register("stock", {
+                                                required: true,
+                                                valueAsNumber: true,
+                                            })}
                                         />
-                                        {validationErrors['stock'] && (
-                                            <div className="invalid-feedback">{validationErrors['stock']}</div>
+                                        {errors.stock && (
+                                            <div className="invalid-feedback">{errors.stock.message}</div>
                                         )}
                                     </div>
                                 </div>
@@ -256,11 +174,10 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                         Category *
                                     </label>
                                     <select
-                                        className={`form-select ${validationErrors['category'] || validationErrors['category.name'] ? 'is-invalid' : ''}`}
-                                        name="category"
-                                        value={product.category.name}
-                                        onChange={handleInputChange}
-                                        required
+                                        className={`form-select ${errors.category ? 'is-invalid' : ''}`}
+                                        {...register("category.name", {
+                                            required: true,
+                                        })}
                                     >
                                         <option value="">Select a category...</option>
                                         {categories && categories.map(category => (
@@ -270,21 +187,20 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                             >{category.name}</option>
                                         ))}
                                     </select>
-                                    {(validationErrors['category'] || validationErrors['category.name']) && (
-                                        <div className="invalid-feedback">{validationErrors['category'] || validationErrors['category.name']}</div>
+                                    {errors.category && (
+                                        <div className="invalid-feedback">{errors.category.message}</div>
                                     )}
                                 </div>
                                 <div className="mb-3 col-md-8">
                                     <label className="form-label">
                                         <i className="bi bi-image me-2 text-success"></i>
-                                        Images URLs
+                                        Images
                                     </label>
                                     <input
                                         type="file"
                                         multiple
                                         className="form-control"
-                                        name="images"
-                                        onChange={handleInputChange}
+                                        {...register("images")}
                                     />
                                 </div>
                             </div>

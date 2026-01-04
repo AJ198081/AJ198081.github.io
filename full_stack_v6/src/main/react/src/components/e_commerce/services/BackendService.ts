@@ -1,4 +1,4 @@
-import backendClient from "../../../api-client/BackendClient.tsx";
+import {backendClient} from "../../../api-client/BackendClient.tsx";
 import type {components} from "../types/schema";
 import type {NewProduct, Schema} from "../types/types.ts";
 
@@ -27,11 +27,13 @@ export const addNewProductPromise = async (product: NewProduct) => {
 
     const {images, ...productData} = product;
 
-    formData.append('product', JSON.stringify(productData));
+    formData.append('product', new Blob([JSON.stringify(productData)], {type: 'application/json'}));
 
-    images.forEach((image) => {
-        formData.append('images', image);
-    });
+    for (let i = 0; i < images.length; i++) {
+        const file = images.item(i);
+        file && formData.append('images', file, file.name || `image-${i}.png`);
+    }
+
 
     const addProductResponse = await backendClient
         .post(

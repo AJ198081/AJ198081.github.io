@@ -1,7 +1,7 @@
 import type {ApiResponse} from "../types/types.ts";
 import {useEffect, useState} from "react";
 import type {AxiosError} from "axios";
-import backendClient from "../../../api-client/BackendClient.tsx";
+import {backendClient} from "../../../api-client/BackendClient.tsx";
 import type {components} from "../types/schema";
 import {useQuery} from "@tanstack/react-query";
 import {useAllCategoriesQueryOptions} from "../services/query-services/QueryOptions.ts";
