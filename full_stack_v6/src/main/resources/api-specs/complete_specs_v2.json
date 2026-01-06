@@ -1979,10 +1979,10 @@
           "enabled": {
             "type": "boolean"
           },
-          "accountNonExpired": {
+          "credentialsNonExpired": {
             "type": "boolean"
           },
-          "credentialsNonExpired": {
+          "accountNonExpired": {
             "type": "boolean"
           },
           "accountNonLocked": {
@@ -2127,10 +2127,14 @@
             "format": "int64"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 3
           },
           "description": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 600,
+            "minLength": 10
           },
           "price": {
             "type": "number"
@@ -2259,10 +2263,10 @@
             },
             "uniqueItems": true
           },
-          "accountNonExpired": {
+          "credentialsNonExpired": {
             "type": "boolean"
           },
-          "credentialsNonExpired": {
+          "accountNonExpired": {
             "type": "boolean"
           },
           "accountNonLocked": {
@@ -2600,18 +2604,18 @@
           "sort": {
             "$ref": "#/components/schemas/SortObject"
           },
-          "unpaged": {
+          "paged": {
             "type": "boolean"
-          },
-          "pageNumber": {
-            "type": "integer",
-            "format": "int32"
           },
           "pageSize": {
             "type": "integer",
             "format": "int32"
           },
-          "paged": {
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unpaged": {
             "type": "boolean"
           }
         }
@@ -2622,10 +2626,10 @@
           "empty": {
             "type": "boolean"
           },
-          "unsorted": {
+          "sorted": {
             "type": "boolean"
           },
-          "sorted": {
+          "unsorted": {
             "type": "boolean"
           }
         }

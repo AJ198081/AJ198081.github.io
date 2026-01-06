@@ -9,7 +9,4 @@ export interface ApiResponse<T> {
 
 export type Schema = components["schemas"];
 
-export type NewProduct = Omit<Schema["Product"], "id" | "version" | "auditMetaData" | "images">
-    & { images: FileList };
-
 export type NewCategory = Omit<Schema["Category"], "id" | "version">;

@@ -1,21 +1,22 @@
-import type {NewProduct} from "../../types/types.ts";
 import {useCategories} from "../../hooks/CustomHooks.ts";
 import {useAddProductMutation} from "../../services/query-services/QueryWrappers.ts";
 import toast from "react-hot-toast";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {saveProductBody} from "../../zod/ordersAPIs.zod.ts";
+import {z} from "zod";
 
 interface ProductFormProps {
     hideModal: () => void;
 }
+
+type NewProduct = z.infer<typeof saveProductBody>;
 
 export const ProductForm = ({hideModal}: ProductFormProps) => {
 
     const {categories} = useCategories();
     const addProductMutation = useAddProductMutation();
 
-    // @ts-ignore
     const {register, handleSubmit: formSubmissionHandler, formState: {errors}} = useForm<NewProduct>({
         resolver: zodResolver(saveProductBody)
     });
@@ -78,14 +79,14 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                         </label>
                                         <input
                                             type="text"
-                                            className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                                            className={`form-control ${errors.product?.name ? 'is-invalid' : ''}`}
                                             placeholder="Enter product name..."
-                                            {...register("name", {
+                                            {...register("product.name", {
                                                 required: true,
                                             })}
                                         />
-                                        {errors.name && (
-                                            <div className="invalid-feedback">{errors.name.message}</div>
+                                        {errors.product?.name && (
+                                            <div className="invalid-feedback">{errors.product.name.message}</div>
                                         )}
                                     </div>
                                 </div>
@@ -97,15 +98,15 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                     Description
                                 </label>
                                 <textarea
-                                    className={`form-control ${errors.description ? 'is-invalid' : ''}`}
+                                    className={`form-control ${errors.product?.description ? 'is-invalid' : ''}`}
                                     rows={4}
                                     placeholder="Enter product description..."
-                                    {...register("description", {
+                                    {...register("product.description", {
                                         required: true,
                                     })}
                                 ></textarea>
-                                {errors.description && (
-                                    <div className="invalid-feedback">{errors.description.message}</div>
+                                {errors.product?.description && (
+                                    <div className="invalid-feedback">{errors.product.description.message}</div>
                                 )}
                             </div>
 
@@ -121,15 +122,15 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                             <input
                                                 type="number"
                                                 step="0.01"
-                                                className={`form-control ${errors.price ? 'is-invalid' : ''}`}
+                                                className={`form-control ${errors.product?.price ? 'is-invalid' : ''}`}
                                                 placeholder="price..."
-                                                {...register("price", {
+                                                {...register("product.price", {
                                                     required: true,
                                                     valueAsNumber: true,
                                                 })}
                                             />
-                                            {errors.price && (
-                                                <div className="invalid-feedback">{errors.price.message}</div>
+                                            {errors.product?.price && (
+                                                <div className="invalid-feedback">{errors.product.price.message}</div>
                                             )}
                                         </div>
                                     </div>
@@ -142,14 +143,14 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                         </label>
                                         <input
                                             type="number"
-                                            className={`form-control ${errors.discountedPrice ? 'is-invalid' : ''}`}
+                                            className={`form-control ${errors.product?.discountedPrice ? 'is-invalid' : ''}`}
                                             placeholder="Discounted price..."
-                                            {...register("discountedPrice", {
+                                            {...register("product.discountedPrice", {
                                                 valueAsNumber: true,
                                             })}
                                         />
-                                        {errors.discountedPrice && (
-                                            <div className="invalid-feedback">{errors.discountedPrice.message}</div>
+                                        {errors.product?.discountedPrice && (
+                                            <div className="invalid-feedback">{errors.product.discountedPrice.message}</div>
                                         )}
                                     </div>
                                 </div>
@@ -161,16 +162,16 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                         </label>
                                         <input
                                             type="number"
-                                            className={`form-control ${errors.stock ? 'is-invalid' : ''}`}
+                                            className={`form-control ${errors.product?.stock ? 'is-invalid' : ''}`}
                                             placeholder="0"
                                             min="0"
-                                            {...register("stock", {
+                                            {...register("product.stock", {
                                                 required: true,
                                                 valueAsNumber: true,
                                             })}
                                         />
-                                        {errors.stock && (
-                                            <div className="invalid-feedback">{errors.stock.message}</div>
+                                        {errors.product?.stock && (
+                                            <div className="invalid-feedback">{errors.product.stock.message}</div>
                                         )}
                                     </div>
                                 </div>
@@ -184,8 +185,8 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                         Category *
                                     </label>
                                     <select
-                                        className={`form-select ${errors.category ? 'is-invalid' : ''}`}
-                                        {...register("category.name", {
+                                        className={`form-select ${errors.product?.category?.name ? 'is-invalid' : ''}`}
+                                        {...register("product.category.name", {
                                             required: true,
                                         })}
                                     >
@@ -197,8 +198,8 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                             >{category.name}</option>
                                         ))}
                                     </select>
-                                    {errors.category && (
-                                        <div className="invalid-feedback">{errors.category.message}</div>
+                                    {errors.product?.category?.name && (
+                                        <div className="invalid-feedback">{errors.product.category.name.message}</div>
                                     )}
                                 </div>
                                 <div className="mb-3 col-md-8">
@@ -209,9 +210,12 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                     <input
                                         type="file"
                                         multiple
-                                        className="form-control"
+                                        className={`form-control ${errors.images ? 'is-invalid' : ''}`}
                                         {...register("images")}
                                     />
+                                    {errors.images && (
+                                        <div className="invalid-feedback">{errors.images.message}</div>
+                                    )}
                                 </div>
                             </div>
                         </div>

@@ -17,8 +17,8 @@ export interface UserCreateRequest {
   password: string;
   role: string;
   enabled?: boolean;
-  accountNonExpired?: boolean;
   credentialsNonExpired?: boolean;
+  accountNonExpired?: boolean;
   accountNonLocked?: boolean;
 }
 
@@ -94,7 +94,15 @@ export interface Image {
 
 export interface Product {
   id?: number;
+  /**
+   * @minLength 3
+   * @maxLength 255
+   */
   name: string;
+  /**
+   * @minLength 10
+   * @maxLength 600
+   */
   description: string;
   price?: number;
   discountedPrice?: number;
@@ -152,8 +160,8 @@ export interface User {
   email: string;
   enabled?: boolean;
   roles?: Role[];
-  accountNonExpired?: boolean;
   credentialsNonExpired?: boolean;
+  accountNonExpired?: boolean;
   accountNonLocked?: boolean;
 }
 
@@ -295,16 +303,16 @@ export interface PageProduct {
 export interface PageableObject {
   offset?: number;
   sort?: SortObject;
-  unpaged?: boolean;
-  pageNumber?: number;
-  pageSize?: number;
   paged?: boolean;
+  pageSize?: number;
+  pageNumber?: number;
+  unpaged?: boolean;
 }
 
 export interface SortObject {
   empty?: boolean;
-  unsorted?: boolean;
   sorted?: boolean;
+  unsorted?: boolean;
 }
 
 export type OrderHistoryOrderStatus =

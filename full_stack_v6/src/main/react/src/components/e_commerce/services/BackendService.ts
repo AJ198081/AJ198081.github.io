@@ -21,17 +21,19 @@ export const getAllCategories = async () => {
     return axiosResponse.data;
 };
 
-export const addNewProductPromise = async (product: NewProduct) => {
+export const addNewProductPromise = async (productBody: NewProduct) => {
 
     const formData = new FormData();
 
-    const {images, ...productData} = product;
+    const {images, product} = productBody;
 
-    formData.append('product', new Blob([JSON.stringify(productData)], {type: 'application/json'}));
+    formData.append('product', new Blob([JSON.stringify(product)], {type: 'application/json'}));
 
-    for (let i = 0; i < images.length; i++) {
-        const file = images.item(i);
-        file && formData.append('images', file, file.name || `image-${i}.png`);
+    if (images) {
+        for (let i = 0; i < images.length; i++) {
+            const file = images[i];
+            file && formData.append('images', file, (file as File).name || `image-${i}.png`);
+        }
     }
 
 

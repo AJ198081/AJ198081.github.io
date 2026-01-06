@@ -19,8 +19,8 @@ export const updateUserBody = zod.object({
   "password": zod.string(),
   "role": zod.string(),
   "enabled": zod.boolean().optional(),
-  "accountNonExpired": zod.boolean().optional(),
   "credentialsNonExpired": zod.boolean().optional(),
+  "accountNonExpired": zod.boolean().optional(),
   "accountNonLocked": zod.boolean().optional()
 }).describe('User create request')
 
@@ -35,8 +35,8 @@ export const createUserBody = zod.object({
   "password": zod.string(),
   "role": zod.string(),
   "enabled": zod.boolean().optional(),
-  "accountNonExpired": zod.boolean().optional(),
   "credentialsNonExpired": zod.boolean().optional(),
+  "accountNonExpired": zod.boolean().optional(),
   "accountNonLocked": zod.boolean().optional()
 }).describe('User create request')
 
@@ -72,6 +72,12 @@ export const putSellerBodyUserPasswordMax = 100;
 
 export const putSellerBodyUserEmailMin = 0;
 export const putSellerBodyUserEmailMax = 100;
+
+export const putSellerBodyProductsItemNameMin = 3;
+export const putSellerBodyProductsItemNameMax = 255;
+
+export const putSellerBodyProductsItemDescriptionMin = 10;
+export const putSellerBodyProductsItemDescriptionMax = 600;
 
 export const putSellerBodyProductsItemCategoryNameMin = 2;
 export const putSellerBodyProductsItemCategoryNameMax = 100;
@@ -109,8 +115,8 @@ export const putSellerBody = zod.object({
   "id": zod.number().optional(),
   "role": zod.enum(['ROLE_CUSTOMER', 'ROLE_USER', 'ROLE_SELLER', 'ROLE_ADMIN', 'ROLE_MODERATOR']).optional()
 })).optional(),
-  "accountNonExpired": zod.boolean().optional(),
   "credentialsNonExpired": zod.boolean().optional(),
+  "accountNonExpired": zod.boolean().optional(),
   "accountNonLocked": zod.boolean().optional()
 }).optional(),
   "version": zod.number().optional(),
@@ -122,8 +128,8 @@ export const putSellerBody = zod.object({
 }).optional(),
   "products": zod.array(zod.object({
   "id": zod.number().optional(),
-  "name": zod.string(),
-  "description": zod.string(),
+  "name": zod.string().min(putSellerBodyProductsItemNameMin).max(putSellerBodyProductsItemNameMax),
+  "description": zod.string().min(putSellerBodyProductsItemDescriptionMin).max(putSellerBodyProductsItemDescriptionMax),
   "price": zod.number().optional(),
   "discountedPrice": zod.number().optional(),
   "stock": zod.number().optional(),
@@ -183,6 +189,12 @@ export const patchSellerBodyUserPasswordMax = 100;
 export const patchSellerBodyUserEmailMin = 0;
 export const patchSellerBodyUserEmailMax = 100;
 
+export const patchSellerBodyProductsItemNameMin = 3;
+export const patchSellerBodyProductsItemNameMax = 255;
+
+export const patchSellerBodyProductsItemDescriptionMin = 10;
+export const patchSellerBodyProductsItemDescriptionMax = 600;
+
 export const patchSellerBodyProductsItemCategoryNameMin = 2;
 export const patchSellerBodyProductsItemCategoryNameMax = 100;
 
@@ -219,8 +231,8 @@ export const patchSellerBody = zod.object({
   "id": zod.number().optional(),
   "role": zod.enum(['ROLE_CUSTOMER', 'ROLE_USER', 'ROLE_SELLER', 'ROLE_ADMIN', 'ROLE_MODERATOR']).optional()
 })).optional(),
-  "accountNonExpired": zod.boolean().optional(),
   "credentialsNonExpired": zod.boolean().optional(),
+  "accountNonExpired": zod.boolean().optional(),
   "accountNonLocked": zod.boolean().optional()
 }).optional(),
   "version": zod.number().optional(),
@@ -232,8 +244,8 @@ export const patchSellerBody = zod.object({
 }).optional(),
   "products": zod.array(zod.object({
   "id": zod.number().optional(),
-  "name": zod.string(),
-  "description": zod.string(),
+  "name": zod.string().min(patchSellerBodyProductsItemNameMin).max(patchSellerBodyProductsItemNameMax),
+  "description": zod.string().min(patchSellerBodyProductsItemDescriptionMin).max(patchSellerBodyProductsItemDescriptionMax),
   "price": zod.number().optional(),
   "discountedPrice": zod.number().optional(),
   "stock": zod.number().optional(),
@@ -324,6 +336,12 @@ export const putProductParams = zod.object({
   "id": zod.number()
 })
 
+export const putProductBodyNameMin = 3;
+export const putProductBodyNameMax = 255;
+
+export const putProductBodyDescriptionMin = 10;
+export const putProductBodyDescriptionMax = 600;
+
 export const putProductBodyCategoryNameMin = 2;
 export const putProductBodyCategoryNameMax = 100;
 
@@ -331,8 +349,8 @@ export const putProductBodyCategoryNameMax = 100;
 
 export const putProductBody = zod.object({
   "id": zod.number().optional(),
-  "name": zod.string(),
-  "description": zod.string(),
+  "name": zod.string().min(putProductBodyNameMin).max(putProductBodyNameMax),
+  "description": zod.string().min(putProductBodyDescriptionMin).max(putProductBodyDescriptionMax),
   "price": zod.number().optional(),
   "discountedPrice": zod.number().optional(),
   "stock": zod.number().optional(),
@@ -373,6 +391,12 @@ export const patchProductParams = zod.object({
   "id": zod.number()
 })
 
+export const patchProductBodyNameMin = 3;
+export const patchProductBodyNameMax = 255;
+
+export const patchProductBodyDescriptionMin = 10;
+export const patchProductBodyDescriptionMax = 600;
+
 export const patchProductBodyCategoryNameMin = 2;
 export const patchProductBodyCategoryNameMax = 100;
 
@@ -380,8 +404,8 @@ export const patchProductBodyCategoryNameMax = 100;
 
 export const patchProductBody = zod.object({
   "id": zod.number().optional(),
-  "name": zod.string(),
-  "description": zod.string(),
+  "name": zod.string().min(patchProductBodyNameMin).max(patchProductBodyNameMax),
+  "description": zod.string().min(patchProductBodyDescriptionMin).max(patchProductBodyDescriptionMax),
   "price": zod.number().optional(),
   "discountedPrice": zod.number().optional(),
   "stock": zod.number().optional(),
@@ -457,8 +481,20 @@ export const putCustomerBodyUserPasswordMax = 100;
 export const putCustomerBodyUserEmailMin = 0;
 export const putCustomerBodyUserEmailMax = 100;
 
+export const putCustomerBodyCartCartItemsItemProductNameMin = 3;
+export const putCustomerBodyCartCartItemsItemProductNameMax = 255;
+
+export const putCustomerBodyCartCartItemsItemProductDescriptionMin = 10;
+export const putCustomerBodyCartCartItemsItemProductDescriptionMax = 600;
+
 export const putCustomerBodyCartCartItemsItemProductCategoryNameMin = 2;
 export const putCustomerBodyCartCartItemsItemProductCategoryNameMax = 100;
+
+export const putCustomerBodyOrdersItemOrderItemsItemProductNameMin = 3;
+export const putCustomerBodyOrdersItemOrderItemsItemProductNameMax = 255;
+
+export const putCustomerBodyOrdersItemOrderItemsItemProductDescriptionMin = 10;
+export const putCustomerBodyOrdersItemOrderItemsItemProductDescriptionMax = 600;
 
 export const putCustomerBodyOrdersItemOrderItemsItemProductCategoryNameMin = 2;
 export const putCustomerBodyOrdersItemOrderItemsItemProductCategoryNameMax = 100;
@@ -496,8 +532,8 @@ export const putCustomerBody = zod.object({
   "id": zod.number().optional(),
   "role": zod.enum(['ROLE_CUSTOMER', 'ROLE_USER', 'ROLE_SELLER', 'ROLE_ADMIN', 'ROLE_MODERATOR']).optional()
 })).optional(),
-  "accountNonExpired": zod.boolean().optional(),
   "credentialsNonExpired": zod.boolean().optional(),
+  "accountNonExpired": zod.boolean().optional(),
   "accountNonLocked": zod.boolean().optional()
 }).optional(),
   "version": zod.number().optional(),
@@ -513,8 +549,8 @@ export const putCustomerBody = zod.object({
   "id": zod.number().optional(),
   "product": zod.object({
   "id": zod.number().optional(),
-  "name": zod.string(),
-  "description": zod.string(),
+  "name": zod.string().min(putCustomerBodyCartCartItemsItemProductNameMin).max(putCustomerBodyCartCartItemsItemProductNameMax),
+  "description": zod.string().min(putCustomerBodyCartCartItemsItemProductDescriptionMin).max(putCustomerBodyCartCartItemsItemProductDescriptionMax),
   "price": zod.number().optional(),
   "discountedPrice": zod.number().optional(),
   "stock": zod.number().optional(),
@@ -590,8 +626,8 @@ export const putCustomerBody = zod.object({
   "id": zod.number().optional(),
   "product": zod.object({
   "id": zod.number().optional(),
-  "name": zod.string(),
-  "description": zod.string(),
+  "name": zod.string().min(putCustomerBodyOrdersItemOrderItemsItemProductNameMin).max(putCustomerBodyOrdersItemOrderItemsItemProductNameMax),
+  "description": zod.string().min(putCustomerBodyOrdersItemOrderItemsItemProductDescriptionMin).max(putCustomerBodyOrdersItemOrderItemsItemProductDescriptionMax),
   "price": zod.number().optional(),
   "discountedPrice": zod.number().optional(),
   "stock": zod.number().optional(),
@@ -668,8 +704,20 @@ export const patchCustomerBodyUserPasswordMax = 100;
 export const patchCustomerBodyUserEmailMin = 0;
 export const patchCustomerBodyUserEmailMax = 100;
 
+export const patchCustomerBodyCartCartItemsItemProductNameMin = 3;
+export const patchCustomerBodyCartCartItemsItemProductNameMax = 255;
+
+export const patchCustomerBodyCartCartItemsItemProductDescriptionMin = 10;
+export const patchCustomerBodyCartCartItemsItemProductDescriptionMax = 600;
+
 export const patchCustomerBodyCartCartItemsItemProductCategoryNameMin = 2;
 export const patchCustomerBodyCartCartItemsItemProductCategoryNameMax = 100;
+
+export const patchCustomerBodyOrdersItemOrderItemsItemProductNameMin = 3;
+export const patchCustomerBodyOrdersItemOrderItemsItemProductNameMax = 255;
+
+export const patchCustomerBodyOrdersItemOrderItemsItemProductDescriptionMin = 10;
+export const patchCustomerBodyOrdersItemOrderItemsItemProductDescriptionMax = 600;
 
 export const patchCustomerBodyOrdersItemOrderItemsItemProductCategoryNameMin = 2;
 export const patchCustomerBodyOrdersItemOrderItemsItemProductCategoryNameMax = 100;
@@ -707,8 +755,8 @@ export const patchCustomerBody = zod.object({
   "id": zod.number().optional(),
   "role": zod.enum(['ROLE_CUSTOMER', 'ROLE_USER', 'ROLE_SELLER', 'ROLE_ADMIN', 'ROLE_MODERATOR']).optional()
 })).optional(),
-  "accountNonExpired": zod.boolean().optional(),
   "credentialsNonExpired": zod.boolean().optional(),
+  "accountNonExpired": zod.boolean().optional(),
   "accountNonLocked": zod.boolean().optional()
 }).optional(),
   "version": zod.number().optional(),
@@ -724,8 +772,8 @@ export const patchCustomerBody = zod.object({
   "id": zod.number().optional(),
   "product": zod.object({
   "id": zod.number().optional(),
-  "name": zod.string(),
-  "description": zod.string(),
+  "name": zod.string().min(patchCustomerBodyCartCartItemsItemProductNameMin).max(patchCustomerBodyCartCartItemsItemProductNameMax),
+  "description": zod.string().min(patchCustomerBodyCartCartItemsItemProductDescriptionMin).max(patchCustomerBodyCartCartItemsItemProductDescriptionMax),
   "price": zod.number().optional(),
   "discountedPrice": zod.number().optional(),
   "stock": zod.number().optional(),
@@ -801,8 +849,8 @@ export const patchCustomerBody = zod.object({
   "id": zod.number().optional(),
   "product": zod.object({
   "id": zod.number().optional(),
-  "name": zod.string(),
-  "description": zod.string(),
+  "name": zod.string().min(patchCustomerBodyOrdersItemOrderItemsItemProductNameMin).max(patchCustomerBodyOrdersItemOrderItemsItemProductNameMax),
+  "description": zod.string().min(patchCustomerBodyOrdersItemOrderItemsItemProductDescriptionMin).max(patchCustomerBodyOrdersItemOrderItemsItemProductDescriptionMax),
   "price": zod.number().optional(),
   "discountedPrice": zod.number().optional(),
   "stock": zod.number().optional(),
@@ -1018,6 +1066,12 @@ export const createSellerBodyUserPasswordMax = 100;
 export const createSellerBodyUserEmailMin = 0;
 export const createSellerBodyUserEmailMax = 100;
 
+export const createSellerBodyProductsItemNameMin = 3;
+export const createSellerBodyProductsItemNameMax = 255;
+
+export const createSellerBodyProductsItemDescriptionMin = 10;
+export const createSellerBodyProductsItemDescriptionMax = 600;
+
 export const createSellerBodyProductsItemCategoryNameMin = 2;
 export const createSellerBodyProductsItemCategoryNameMax = 100;
 
@@ -1054,8 +1108,8 @@ export const createSellerBody = zod.object({
   "id": zod.number().optional(),
   "role": zod.enum(['ROLE_CUSTOMER', 'ROLE_USER', 'ROLE_SELLER', 'ROLE_ADMIN', 'ROLE_MODERATOR']).optional()
 })).optional(),
-  "accountNonExpired": zod.boolean().optional(),
   "credentialsNonExpired": zod.boolean().optional(),
+  "accountNonExpired": zod.boolean().optional(),
   "accountNonLocked": zod.boolean().optional()
 }).optional(),
   "version": zod.number().optional(),
@@ -1067,8 +1121,8 @@ export const createSellerBody = zod.object({
 }).optional(),
   "products": zod.array(zod.object({
   "id": zod.number().optional(),
-  "name": zod.string(),
-  "description": zod.string(),
+  "name": zod.string().min(createSellerBodyProductsItemNameMin).max(createSellerBodyProductsItemNameMax),
+  "description": zod.string().min(createSellerBodyProductsItemDescriptionMin).max(createSellerBodyProductsItemDescriptionMax),
   "price": zod.number().optional(),
   "discountedPrice": zod.number().optional(),
   "stock": zod.number().optional(),
@@ -1101,44 +1155,51 @@ export const createSellerBody = zod.object({
 })
 
 
+export const saveProductBodyProductNameMin = 3;
+export const saveProductBodyProductNameMax = 255;
+
+export const saveProductBodyProductDescriptionMin = 10;
+export const saveProductBodyProductDescriptionMax = 600;
+
 export const saveProductBodyProductCategoryNameMin = 2;
 export const saveProductBodyProductCategoryNameMax = 100;
 
 
+
 export const saveProductBody = zod.object({
   "product": zod.object({
-    "id": zod.number().optional(),
-    "name": zod.string(),
-    "description": zod.string(),
-    "price": zod.number().optional(),
-    "discountedPrice": zod.number().optional(),
-    "stock": zod.number().optional(),
-    "category": zod.object({
-      "id": zod.number().optional(),
-      "name": zod.string().min(saveProductBodyProductCategoryNameMin).max(saveProductBodyProductCategoryNameMax),
-      "version": zod.number().optional()
-    }),
-    "images": zod.array(zod.object({
-      "id": zod.number().optional(),
-      "fileName": zod.string().optional(),
-      "contentType": zod.string().optional(),
-      "downloadUrl": zod.string().optional(),
-      "version": zod.number().optional(),
-      "auditMetaData": zod.object({
-        "createdBy": zod.string().optional(),
-        "createdDate": zod.iso.datetime({}).optional(),
-        "lastModifiedBy": zod.string().optional(),
-        "lastModifiedDate": zod.iso.datetime({}).optional()
-      }).optional()
-    })).optional(),
-    "version": zod.number().optional(),
-    "auditMetaData": zod.object({
-      "createdBy": zod.string().optional(),
-      "createdDate": zod.iso.datetime({}).optional(),
-      "lastModifiedBy": zod.string().optional(),
-      "lastModifiedDate": zod.iso.datetime({}).optional()
-    }).optional()
-  }),
+  "id": zod.number().optional(),
+  "name": zod.string().min(saveProductBodyProductNameMin).max(saveProductBodyProductNameMax),
+  "description": zod.string().min(saveProductBodyProductDescriptionMin).max(saveProductBodyProductDescriptionMax),
+  "price": zod.number().optional(),
+  "discountedPrice": zod.number().optional(),
+  "stock": zod.number().optional(),
+  "category": zod.object({
+  "id": zod.number().optional(),
+  "name": zod.string().min(saveProductBodyProductCategoryNameMin).max(saveProductBodyProductCategoryNameMax),
+  "version": zod.number().optional()
+}),
+  "images": zod.array(zod.object({
+  "id": zod.number().optional(),
+  "fileName": zod.string().optional(),
+  "contentType": zod.string().optional(),
+  "downloadUrl": zod.string().optional(),
+  "version": zod.number().optional(),
+  "auditMetaData": zod.object({
+  "createdBy": zod.string().optional(),
+  "createdDate": zod.iso.datetime({}).optional(),
+  "lastModifiedBy": zod.string().optional(),
+  "lastModifiedDate": zod.iso.datetime({}).optional()
+}).optional()
+})).optional(),
+  "version": zod.number().optional(),
+  "auditMetaData": zod.object({
+  "createdBy": zod.string().optional(),
+  "createdDate": zod.iso.datetime({}).optional(),
+  "lastModifiedBy": zod.string().optional(),
+  "lastModifiedDate": zod.iso.datetime({}).optional()
+}).optional()
+}),
   "images": zod.array(zod.instanceof(File)).optional()
 })
 
@@ -1256,8 +1317,20 @@ export const createCustomerBodyUserPasswordMax = 100;
 export const createCustomerBodyUserEmailMin = 0;
 export const createCustomerBodyUserEmailMax = 100;
 
+export const createCustomerBodyCartCartItemsItemProductNameMin = 3;
+export const createCustomerBodyCartCartItemsItemProductNameMax = 255;
+
+export const createCustomerBodyCartCartItemsItemProductDescriptionMin = 10;
+export const createCustomerBodyCartCartItemsItemProductDescriptionMax = 600;
+
 export const createCustomerBodyCartCartItemsItemProductCategoryNameMin = 2;
 export const createCustomerBodyCartCartItemsItemProductCategoryNameMax = 100;
+
+export const createCustomerBodyOrdersItemOrderItemsItemProductNameMin = 3;
+export const createCustomerBodyOrdersItemOrderItemsItemProductNameMax = 255;
+
+export const createCustomerBodyOrdersItemOrderItemsItemProductDescriptionMin = 10;
+export const createCustomerBodyOrdersItemOrderItemsItemProductDescriptionMax = 600;
 
 export const createCustomerBodyOrdersItemOrderItemsItemProductCategoryNameMin = 2;
 export const createCustomerBodyOrdersItemOrderItemsItemProductCategoryNameMax = 100;
@@ -1295,8 +1368,8 @@ export const createCustomerBody = zod.object({
   "id": zod.number().optional(),
   "role": zod.enum(['ROLE_CUSTOMER', 'ROLE_USER', 'ROLE_SELLER', 'ROLE_ADMIN', 'ROLE_MODERATOR']).optional()
 })).optional(),
-  "accountNonExpired": zod.boolean().optional(),
   "credentialsNonExpired": zod.boolean().optional(),
+  "accountNonExpired": zod.boolean().optional(),
   "accountNonLocked": zod.boolean().optional()
 }).optional(),
   "version": zod.number().optional(),
@@ -1312,8 +1385,8 @@ export const createCustomerBody = zod.object({
   "id": zod.number().optional(),
   "product": zod.object({
   "id": zod.number().optional(),
-  "name": zod.string(),
-  "description": zod.string(),
+  "name": zod.string().min(createCustomerBodyCartCartItemsItemProductNameMin).max(createCustomerBodyCartCartItemsItemProductNameMax),
+  "description": zod.string().min(createCustomerBodyCartCartItemsItemProductDescriptionMin).max(createCustomerBodyCartCartItemsItemProductDescriptionMax),
   "price": zod.number().optional(),
   "discountedPrice": zod.number().optional(),
   "stock": zod.number().optional(),
@@ -1389,8 +1462,8 @@ export const createCustomerBody = zod.object({
   "id": zod.number().optional(),
   "product": zod.object({
   "id": zod.number().optional(),
-  "name": zod.string(),
-  "description": zod.string(),
+  "name": zod.string().min(createCustomerBodyOrdersItemOrderItemsItemProductNameMin).max(createCustomerBodyOrdersItemOrderItemsItemProductNameMax),
+  "description": zod.string().min(createCustomerBodyOrdersItemOrderItemsItemProductDescriptionMin).max(createCustomerBodyOrdersItemOrderItemsItemProductDescriptionMax),
   "price": zod.number().optional(),
   "discountedPrice": zod.number().optional(),
   "stock": zod.number().optional(),
@@ -1501,6 +1574,12 @@ export const getProductsByPageQueryParams = zod.object({
 })
 
 
+export const getAllProductsResponseNameMin = 3;
+export const getAllProductsResponseNameMax = 255;
+
+export const getAllProductsResponseDescriptionMin = 10;
+export const getAllProductsResponseDescriptionMax = 600;
+
 export const getAllProductsResponseCategoryNameMin = 2;
 export const getAllProductsResponseCategoryNameMax = 100;
 
@@ -1508,8 +1587,8 @@ export const getAllProductsResponseCategoryNameMax = 100;
 
 export const getAllProductsResponseItem = zod.object({
   "id": zod.number().optional(),
-  "name": zod.string(),
-  "description": zod.string(),
+  "name": zod.string().min(getAllProductsResponseNameMin).max(getAllProductsResponseNameMax),
+  "description": zod.string().min(getAllProductsResponseDescriptionMin).max(getAllProductsResponseDescriptionMax),
   "price": zod.number().optional(),
   "discountedPrice": zod.number().optional(),
   "stock": zod.number().optional(),
