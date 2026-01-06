@@ -3,6 +3,8 @@ import {useCategories} from "../../hooks/CustomHooks.ts";
 import {useAddProductMutation} from "../../services/query-services/QueryWrappers.ts";
 import toast from "react-hot-toast";
 import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {saveProductBody} from "../../zod/ordersAPIs.zod.ts";
 
 interface ProductFormProps {
     hideModal: () => void;
@@ -13,7 +15,10 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
     const {categories} = useCategories();
     const addProductMutation = useAddProductMutation();
 
-    const {register, handleSubmit: formSubmissionHandler, formState: {errors}} = useForm<NewProduct>();
+    // @ts-ignore
+    const {register, handleSubmit: formSubmissionHandler, formState: {errors}} = useForm<NewProduct>({
+        resolver: zodResolver(saveProductBody)
+    });
 
     const handleSubmit = async (data: NewProduct) => {
         try {
@@ -28,7 +33,12 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
             );
             hideModal();
         } catch (e) {
-            console.log(e);
+            console.log(typeof e);
+            if (e instanceof Error) {
+                toast.error(
+                    `${e.message}`
+                );
+            }
         }
     }
 

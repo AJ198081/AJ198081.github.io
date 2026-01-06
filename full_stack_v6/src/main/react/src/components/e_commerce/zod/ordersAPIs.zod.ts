@@ -1105,41 +1105,40 @@ export const saveProductBodyProductCategoryNameMin = 2;
 export const saveProductBodyProductCategoryNameMax = 100;
 
 
-
 export const saveProductBody = zod.object({
   "product": zod.object({
-  "id": zod.number().optional(),
-  "name": zod.string(),
-  "description": zod.string(),
-  "price": zod.number().optional(),
-  "discountedPrice": zod.number().optional(),
-  "stock": zod.number().optional(),
-  "category": zod.object({
-  "id": zod.number().optional(),
-  "name": zod.string().min(saveProductBodyProductCategoryNameMin).max(saveProductBodyProductCategoryNameMax),
-  "version": zod.number().optional()
-}),
-  "images": zod.array(zod.object({
-  "id": zod.number().optional(),
-  "fileName": zod.string().optional(),
-  "contentType": zod.string().optional(),
-  "downloadUrl": zod.string().optional(),
-  "version": zod.number().optional(),
-  "auditMetaData": zod.object({
-  "createdBy": zod.string().optional(),
-  "createdDate": zod.iso.datetime({}).optional(),
-  "lastModifiedBy": zod.string().optional(),
-  "lastModifiedDate": zod.iso.datetime({}).optional()
-}).optional()
-})).optional(),
-  "version": zod.number().optional(),
-  "auditMetaData": zod.object({
-  "createdBy": zod.string().optional(),
-  "createdDate": zod.iso.datetime({}).optional(),
-  "lastModifiedBy": zod.string().optional(),
-  "lastModifiedDate": zod.iso.datetime({}).optional()
-}).optional()
-}),
+    "id": zod.number().optional(),
+    "name": zod.string(),
+    "description": zod.string(),
+    "price": zod.number().optional(),
+    "discountedPrice": zod.number().optional(),
+    "stock": zod.number().optional(),
+    "category": zod.object({
+      "id": zod.number().optional(),
+      "name": zod.string().min(saveProductBodyProductCategoryNameMin).max(saveProductBodyProductCategoryNameMax),
+      "version": zod.number().optional()
+    }),
+    "images": zod.array(zod.object({
+      "id": zod.number().optional(),
+      "fileName": zod.string().optional(),
+      "contentType": zod.string().optional(),
+      "downloadUrl": zod.string().optional(),
+      "version": zod.number().optional(),
+      "auditMetaData": zod.object({
+        "createdBy": zod.string().optional(),
+        "createdDate": zod.iso.datetime({}).optional(),
+        "lastModifiedBy": zod.string().optional(),
+        "lastModifiedDate": zod.iso.datetime({}).optional()
+      }).optional()
+    })).optional(),
+    "version": zod.number().optional(),
+    "auditMetaData": zod.object({
+      "createdBy": zod.string().optional(),
+      "createdDate": zod.iso.datetime({}).optional(),
+      "lastModifiedBy": zod.string().optional(),
+      "lastModifiedDate": zod.iso.datetime({}).optional()
+    }).optional()
+  }),
   "images": zod.array(zod.instanceof(File)).optional()
 })
 

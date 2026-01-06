@@ -62,19 +62,19 @@ class ProductController {
     @Operation(summary = "Update a product (Put operation)", responses = {
             @ApiResponse(description = "Product updated successfully", responseCode = "202")
     })
-    public ResponseEntity<Void> putProduct(@PathVariable("id") Long id, @RequestBody @Validated Product product) {
+    public ResponseEntity<Void> putProduct(@PathVariable Long id, @RequestBody @Validated Product product) {
         productService.putProduct(id, product);
         return ResponseEntity.accepted().build();
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Product> patchProduct(@PathVariable("id") Long id, @RequestBody Product product) {
+    public ResponseEntity<Product> patchProduct(@PathVariable Long id, @RequestBody Product product) {
         productService.patchProduct(id, product);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProductById(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteProductById(@PathVariable Long id) {
         productService.deleteProductById(id);
         return ResponseEntity.ok().build();
     }
