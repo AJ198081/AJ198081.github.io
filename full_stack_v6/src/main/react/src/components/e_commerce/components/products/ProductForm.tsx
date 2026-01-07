@@ -10,7 +10,7 @@ interface ProductFormProps {
     hideModal: () => void;
 }
 
-type NewProduct = z.infer<typeof saveProductBody>;
+export type NewProduct = z.infer<typeof saveProductBody>;
 
 export const ProductForm = ({hideModal}: ProductFormProps) => {
 
@@ -211,7 +211,9 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                         type="file"
                                         multiple
                                         className={`form-control ${errors.images ? 'is-invalid' : ''}`}
-                                        {...register("images")}
+                                        {...register("images", {
+                                            setValueAs: (value: FileList) => Array.from(value)
+                                        })}
                                     />
                                     {errors.images && (
                                         <div className="invalid-feedback">{errors.images.message}</div>
