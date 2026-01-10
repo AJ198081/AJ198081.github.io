@@ -1,24 +1,29 @@
 import {useCategories} from "../../hooks/CustomHooks.ts";
 import {useAddProductMutation} from "../../services/query-services/QueryWrappers.ts";
 import toast from "react-hot-toast";
-import {useForm} from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {saveProductBody} from "../../zod/ordersAPIs.zod.ts";
 import {z} from "zod";
+import {SaveProductBody} from "../../zod/ordersAPIs.zod.ts";
 
 interface ProductFormProps {
     hideModal: () => void;
 }
 
-export type NewProduct = z.infer<typeof saveProductBody>;
+export type NewProduct = z.infer<typeof SaveProductBody>;
 
 export const ProductForm = ({hideModal}: ProductFormProps) => {
 
     const {categories} = useCategories();
     const addProductMutation = useAddProductMutation();
 
-    const {register, handleSubmit: formSubmissionHandler, formState: {errors}} = useForm<NewProduct>({
-        resolver: zodResolver(saveProductBody)
+    const {
+        register,
+        control,
+        handleSubmit: formSubmissionHandler,
+        formState: {errors}
+    } = useForm<NewProduct>({
+        resolver: zodResolver(SaveProductBody)
     });
 
     const handleSubmit = async (data: NewProduct) => {
@@ -207,13 +212,21 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
                                         <i className="bi bi-image me-2 text-success"></i>
                                         Images
                                     </label>
-                                    <input
-                                        type="file"
-                                        multiple
-                                        className={`form-control ${errors.images ? 'is-invalid' : ''}`}
-                                        {...register("images", {
-                                            setValueAs: (value: FileList) => Array.from(value)
-                                        })}
+                                    <Controller
+                                        name="images"
+                                        control={control}
+                                        render={({field}) => (
+                                            <input
+                                                type="file"
+                                                name={"images"}
+                                                multiple={true}
+                                                onChange={(e) => {
+                                                    const files = e.target.files;
+                                                    field.onChange(files ? Array.from(files) : []);
+                                                }}
+                                                className={`form-control ${errors.images ? 'is-invalid' : ''}`}
+                                            />
+                                        )}
                                     />
                                     {errors.images && (
                                         <div className="invalid-feedback">{errors.images.message}</div>

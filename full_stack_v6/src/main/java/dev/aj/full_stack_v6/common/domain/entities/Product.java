@@ -54,9 +54,9 @@ public class Product {
     @JdbcTypeCode(SqlTypes.BIGINT)
     private Long id;
 
-    @Column(nullable = false, unique = true, columnDefinition = "VARCHAR(255)")
+    @Column(nullable = false, unique = true, columnDefinition = "VARCHAR(500)")
     @NotNull
-    @Size(min = 3, max = 255)
+    @Size(min = 3, max = 500)
     private String name;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(255)")

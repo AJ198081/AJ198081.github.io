@@ -5,7 +5,9 @@ import type {operations, paths} from "../assets/schema";
 export const backendClient = axios.create({baseURL: `${import.meta.env.VITE_API_BASE_URL}`});
 
 export const apiClient = <T = unknown>(config: AxiosRequestConfig): Promise<AxiosResponse<T>> => {
-    return backendClient(config);
+    return backendClient.request({
+        ...config
+    });
 }
 
 export type BackendPaths = paths[keyof paths];

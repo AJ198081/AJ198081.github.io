@@ -36,7 +36,10 @@ public class Image {
     private Long id;
 
     private String fileName;
+
     private String contentType;
+
+    @NotNull
     private String downloadUrl;
 
     @Basic(fetch = FetchType.LAZY)
@@ -52,10 +55,13 @@ public class Image {
     private Product product;
 
     @Version
+    @JdbcTypeCode(SqlTypes.INTEGER)
+    @JsonIgnore
     private Integer version;
 
     @Embedded
     @Builder.Default
+    @JsonIgnore
     private AuditMetaData auditMetaData = new AuditMetaData();
 
     public Image(MultipartFile multipartFile) {

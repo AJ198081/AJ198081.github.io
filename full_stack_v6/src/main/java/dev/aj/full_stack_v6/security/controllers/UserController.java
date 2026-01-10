@@ -79,7 +79,7 @@ class UserController {
             description = "Delete a username",
             operationId = "deleteUser",
             parameters = {
-                    @Parameter(in = ParameterIn.PATH, name = "username", schema = @Schema(maxLength = 10, minLength = 1))
+                    @Parameter(in = ParameterIn.PATH, name = "username", schema = @Schema(maxLength = 23, minLength = 1))
             },
             responses = {@ApiResponse(responseCode = "202", description = "User deleted")}
     )

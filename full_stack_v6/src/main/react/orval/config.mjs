@@ -12,7 +12,7 @@ export default defineConfig({
                 useOptions: true,
                 mode: 'split',
                 prettier: true,
-                tsConfig: '../tsconfig.app.json',
+                httpClient: 'axios',
                 override: {
                     title: (title) => `${title}_contract`,
                     mutator: {
@@ -23,11 +23,18 @@ export default defineConfig({
             }
         },
         'e_commerce_contract_zod': {
-            input: '../../resources/api-specs/complete_specs_v2.json',
+            input: 'http://localhost:11000/v3/api-docs',
             output: {
                 target: '../src/components/e_commerce/zod',
+                schemaType: '../src/components/e_commerce/zod/types',
                 client: 'zod',
-                fileExtension: '.zod.ts'
+                fileExtension: '.zod.ts',
+                mode: 'split',
+                useOptions: true,
+                prettier: true,
+                override: {
+                    title: (title) => `${title}_orval_zod`,
+                }
             }
         }
     }

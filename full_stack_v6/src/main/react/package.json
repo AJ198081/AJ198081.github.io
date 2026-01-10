@@ -11,7 +11,8 @@
     "generate-types": "npx openapi-typescript C:/Users/amarj/IdeaProjects/spring_master/full_stack_v6/src/main/resources/api-specs/complete_specs_v2.json -o C:/Users/amarj/IdeaProjects/spring_master/full_stack_v6/src/main/react/src/components/e_commerce/types/schema.d.ts",
     "generate-zod-types": "openapi-zod-client C:/Users/amarj/IdeaProjects/spring_master/full_stack_v6/src/main/resources/api-specs/complete_specs_v2.json -o ./src/components/e_commerce/types/zod_types.ts --export-schemas=true --export-types=true --implicit-required=true --base-url=http://localhost:11000 --strict-objects=true",
     "help-on-generate-zod-types": "openapi-zod-client --help",
-    "generate-orval-types": "orval --config orval/config.js"
+    "generate-orval-types": "orval --config orval/config.mjs",
+    "node_version": "node -v"
   },
   "quokka": {
     "tsConfig": "./tsconfig.quokka.json"
@@ -56,11 +57,19 @@
     "globals": "^16.5.0",
     "openapi-typescript": "^7.10.1",
     "openapi-zod-client": "^1.18.3",
-    "orval": "^7.17.2",
-    "prettier": "^3.7.4",
+    "orval": "^8.0.0-rc.5",
+    "prettier": "3.7.4",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.50.1",
     "vite": "^7.3.0"
+  },
+  "prettier": {
+    "singleQuote": false,
+    "trailingComma": "all",
+    "arrowParens": "always",
+    "printWidth": 120,
+    "tabWidth": 2,
+    "semi": true
   },
   "engines": {
     "node": ">=22.12.0"
