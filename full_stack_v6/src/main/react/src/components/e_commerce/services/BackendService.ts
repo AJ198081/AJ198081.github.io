@@ -1,6 +1,7 @@
 import {backendClient} from "../../../api-client/BackendClient.tsx";
+import type { NewProduct } from "../components/products/ProductForm.tsx";
 import type {components} from "../types/schema";
-import type {NewProduct, Schema} from "../types/types.ts";
+import type {Schema} from "../types/types.ts";
 
 
 const PRODUCT_BASE_URL = import.meta.env.VITE_PRODUCT_API_PATH as string;
@@ -40,12 +41,7 @@ export const addNewProductPromise = async (productBody: NewProduct) => {
     const addProductResponse = await backendClient
         .post(
             `${PRODUCT_BASE_URL}/`,
-            formData,
-            {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            }
+            formData
         );
     return addProductResponse.data as Schema["Product"];
 };

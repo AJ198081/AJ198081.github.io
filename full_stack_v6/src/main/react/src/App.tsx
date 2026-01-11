@@ -29,9 +29,9 @@ function App() {
                         <AppRoutes/>
                     </main>
                     <Footer/>
-                    <Toaster/>
                 </div>
             </BrowserRouter>
+            <Toaster/>
         </QueryClientProvider>
     );
 }

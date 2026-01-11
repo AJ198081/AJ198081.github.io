@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
-import {SaveProductBody} from "../../zod/ordersAPIs.zod.ts";
+import {SaveProductBody} from "../../orval/zod/ordersAPIs.zod.ts";
 
 interface ProductFormProps {
     hideModal: () => void;
@@ -29,10 +29,12 @@ export const ProductForm = ({hideModal}: ProductFormProps) => {
     const handleSubmit = async (data: NewProduct) => {
         try {
             const submittedData = await addProductMutation.mutateAsync(data);
+
+            // const submittedData = await saveProductMutation.mutateAsync({data});
+
             toast.success(
-                `${submittedData.name} added successfully!`,
-                {
-                    toasterId: "product-added-toast",
+                `${submittedData.name || data.product.name} added successfully!`, {
+                    id: "product-added-toast",
                     duration: 5000,
                     position: "bottom-right"
                 }

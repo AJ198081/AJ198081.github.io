@@ -19,7 +19,7 @@ export type BackendOperation = BackendPath[keyof BackendPath];
 export type BackendResponse<T> = T extends BackendOperation ? Awaited<ReturnType<T>> : never;
 
 
-const jwtToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhal9hZG1pbiIsImF1dGhvcml0aWVzIjpbIlJPTEVfQURNSU4iXSwiaWF0IjoxNzY3MjEyMjYzLCJleHAiOjE3NjgwNzYyNjN9.vCIKWMzE4NPsMDYa30HeM2He2QwS9kokwM21YKTIgin4WlTAgs1GHJuaCGUfoQZ4KGgodNHMi_UtYu3kubIK3w";
+const jwtToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhal9hZG1pbiIsImF1dGhvcml0aWVzIjpbIlJPTEVfQURNSU4iXSwiaWF0IjoxNzY4MDgwMDExLCJleHAiOjE3Njg5NDQwMTF9.eJMk2w_IScwcAyqjhZaaUs-yDL_dy4XN6Q_KywBexr2pBgKQP2ixlp-p_qYgbSLZVRlOCkhFYArrUVa0LokXcg";
 
 backendClient.interceptors.request.use(config => {
     config.headers.set(

@@ -1,4 +1,4 @@
-import {QueryClient, useMutation, useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {getAllProducts} from "../BackendService.ts";
 import {allProductsQueryOptions, useAddNewProductQueryOptions} from "./QueryOptions.ts";
 
@@ -18,6 +18,7 @@ export const useBetterAllProductsQuery = () => {
 }
 
 export const useAddProductMutation = () => {
+    const queryClient = useQueryClient();
 
-    return useMutation(useAddNewProductQueryOptions(new QueryClient()));
+    return useMutation(useAddNewProductQueryOptions(queryClient));
 }

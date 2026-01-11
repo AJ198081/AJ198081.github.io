@@ -20,9 +20,9 @@ export const UpdateUserBody = zod
     password: zod.string(),
     role: zod.string(),
     enabled: zod.boolean().optional(),
-    accountNonExpired: zod.boolean().optional(),
     credentialsNonExpired: zod.boolean().optional(),
     accountNonLocked: zod.boolean().optional(),
+    accountNonExpired: zod.boolean().optional(),
   })
   .describe("User create request");
 
@@ -37,9 +37,9 @@ export const CreateUserBody = zod
     password: zod.string(),
     role: zod.string(),
     enabled: zod.boolean().optional(),
-    accountNonExpired: zod.boolean().optional(),
     credentialsNonExpired: zod.boolean().optional(),
     accountNonLocked: zod.boolean().optional(),
+    accountNonExpired: zod.boolean().optional(),
   })
   .describe("User create request");
 
@@ -125,9 +125,9 @@ export const PutSellerBody = zod.object({
           }),
         )
         .optional(),
-      accountNonExpired: zod.boolean().optional(),
       credentialsNonExpired: zod.boolean().optional(),
       accountNonLocked: zod.boolean().optional(),
+      accountNonExpired: zod.boolean().optional(),
     })
     .optional(),
   version: zod.number().optional(),
@@ -261,9 +261,9 @@ export const PatchSellerBody = zod.object({
           }),
         )
         .optional(),
-      accountNonExpired: zod.boolean().optional(),
       credentialsNonExpired: zod.boolean().optional(),
       accountNonLocked: zod.boolean().optional(),
+      accountNonExpired: zod.boolean().optional(),
     })
     .optional(),
   version: zod.number().optional(),
@@ -568,9 +568,9 @@ export const PutCustomerBody = zod.object({
           }),
         )
         .optional(),
-      accountNonExpired: zod.boolean().optional(),
       credentialsNonExpired: zod.boolean().optional(),
       accountNonLocked: zod.boolean().optional(),
+      accountNonExpired: zod.boolean().optional(),
     })
     .optional(),
   version: zod.number().optional(),
@@ -852,9 +852,9 @@ export const PatchCustomerBody = zod.object({
           }),
         )
         .optional(),
-      accountNonExpired: zod.boolean().optional(),
       credentialsNonExpired: zod.boolean().optional(),
       accountNonLocked: zod.boolean().optional(),
+      accountNonExpired: zod.boolean().optional(),
     })
     .optional(),
   version: zod.number().optional(),
@@ -1251,9 +1251,9 @@ export const CreateSellerBody = zod.object({
           }),
         )
         .optional(),
-      accountNonExpired: zod.boolean().optional(),
       credentialsNonExpired: zod.boolean().optional(),
       accountNonLocked: zod.boolean().optional(),
+      accountNonExpired: zod.boolean().optional(),
     })
     .optional(),
   version: zod.number().optional(),
@@ -1529,9 +1529,9 @@ export const CreateCustomerBody = zod.object({
           }),
         )
         .optional(),
-      accountNonExpired: zod.boolean().optional(),
       credentialsNonExpired: zod.boolean().optional(),
       accountNonLocked: zod.boolean().optional(),
+      accountNonExpired: zod.boolean().optional(),
     })
     .optional(),
   version: zod.number().optional(),

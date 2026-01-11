@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generate-types": "npx openapi-typescript C:/Users/amarj/IdeaProjects/spring_master/full_stack_v6/src/main/resources/api-specs/complete_specs_v2.json -o C:/Users/amarj/IdeaProjects/spring_master/full_stack_v6/src/main/react/src/components/e_commerce/types/schema.d.ts",
+    "generate-openApi-types": "npx openapi-typescript C:/Users/amarj/IdeaProjects/spring_master/full_stack_v6/src/main/resources/api-specs/complete_specs_v2.json -o C:/Users/amarj/IdeaProjects/spring_master/full_stack_v6/src/main/react/src/components/e_commerce/types/schema.d.ts",
     "generate-zod-types": "openapi-zod-client C:/Users/amarj/IdeaProjects/spring_master/full_stack_v6/src/main/resources/api-specs/complete_specs_v2.json -o ./src/components/e_commerce/types/zod_types.ts --export-schemas=true --export-types=true --implicit-required=true --base-url=http://localhost:11000 --strict-objects=true",
     "help-on-generate-zod-types": "openapi-zod-client --help",
     "generate-orval-types": "orval --config orval/config.mjs",
