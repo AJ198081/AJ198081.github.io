@@ -31,7 +31,10 @@ function outerFunction() {
 const createCounter = () => {
     let count = 0;
     console.log(count, 'count');
-    const getNext =  () => ++count;
+    const getNext =  () => {
+        console.log(`Next count is being called${count}.`)
+        return ++count;
+    }
     const getPrevious = () => --count;
     const reset = () => count = 0;
     const getCurrent = () => count;
@@ -41,11 +44,6 @@ const createCounter = () => {
 
 const counterInstance = createCounter();
 
-console.log(counterInstance.getNext());
-console.log(counterInstance.getNext());
-console.log(counterInstance.getNext());
-console.log(counterInstance.getNext());
-console.log(counterInstance.getNext());
 console.log(counterInstance.getNext());
 console.log(counterInstance.getNext());
 console.log(counterInstance.getCurrent());
