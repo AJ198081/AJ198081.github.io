@@ -3,6 +3,7 @@ package dev.aj.full_stack_v6.product;
 import dev.aj.full_stack_v6.common.domain.entities.Product;
 import org.springframework.data.domain.Page;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public interface ProductService {
     void putProduct(Long id, Product product);
     void patchProduct(Long id, Product product);
     void deleteProductById(Long id);
+    List<Product> getProductsByPage(PageRequest pageRequest);
 }

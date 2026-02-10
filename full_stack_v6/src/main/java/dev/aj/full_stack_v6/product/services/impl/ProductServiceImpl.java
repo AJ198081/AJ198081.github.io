@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -124,6 +125,11 @@ public class ProductServiceImpl implements ProductService {
         productRepository.findById(id)
                 .ifPresentOrElse(productRepository::delete,
                         () -> log.warn("Entity ID {} was not found, hence no deletion occurred", id));
+    }
+
+    @Override
+    public List<Product> getProductsByPage(PageRequest pageRequest) {
+        return productRepository.getProductsPageBetweenPrice(BigDecimal.valueOf(50L), BigDecimal.valueOf(500L), pageRequest);
     }
 
     private void updateProductIdempotent(Product modifiedProduct, Product existing) {

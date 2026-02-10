@@ -171,9 +171,13 @@ public class CommonExceptionHandlers {
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<ProblemDetail> handleException(Exception ex) {
 
-        HttpStatus status = ex instanceof ResponseStatusException responseStatusException
-                ? HttpStatus.valueOf(responseStatusException.getStatusCode().value())
-                : HttpStatus.INTERNAL_SERVER_ERROR;
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        if (ex instanceof ResponseStatusException rse) {
+            status = HttpStatus.valueOf(rse.getStatusCode().value());
+        } else if (ex instanceof org.springframework.web.ErrorResponse er) {
+            status = HttpStatus.valueOf(er.getStatusCode().value());
+        }
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 status,

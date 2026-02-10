@@ -39,6 +39,11 @@ class ProductController {
         return ResponseEntity.ok(productService.saveProduct(product, images));
     }
 
+    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Product> saveProduct(@Valid @RequestBody Product product) {
+        return ResponseEntity.ok(productService.saveProduct(product, null));
+    }
+
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Product>> getAllProducts() {
         return ResponseEntity.ok(productService.getAllProducts());
