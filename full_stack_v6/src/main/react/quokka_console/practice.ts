@@ -44,12 +44,12 @@ const createCounter = () => {
 
 const counterInstance = createCounter();
 
-console.log(counterInstance.getNext());
+/*console.log(counterInstance.getNext());
 console.log(counterInstance.getNext());
 console.log(counterInstance.getCurrent());
 console.log(counterInstance.getPrevious());
 console.log(counterInstance.getPrevious());
-console.log(counterInstance.getCurrent());
+console.log(counterInstance.getCurrent());*/
 
 const newCounter = () => {
     let count = 0;

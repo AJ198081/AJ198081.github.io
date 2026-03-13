@@ -51,7 +51,7 @@ export const ProductManagement = () => {
                         type="text"
                         className="form-control border-start-0 ps-0"
                         placeholder="Search products by name or flavor..."
-                        value=""
+                        defaultValue=""
                     />
                     <button
                         className="btn btn-outline-secondary border-start-0"
