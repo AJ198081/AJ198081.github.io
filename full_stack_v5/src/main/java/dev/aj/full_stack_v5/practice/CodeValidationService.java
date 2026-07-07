@@ -45,7 +45,7 @@ public class CodeValidationService {
         promotionRepository.findAll().forEach(promotion -> {
             if (promotion.getActive()) {
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

@@ -55,7 +55,7 @@ public class CustomerQueryController {
         return customer.getFirstName().toUpperCase();
     }
 
-    //    There are called 'resolver functions',
+    //    These are called 'resolver functions',
 //    which GraphQL uses to resolve the fields when it creates a Graph of elements to fulfil a user request
 //    NOTE: Resolver Functions take precedence during query resolution
     @SchemaMapping(typeName = "Customer", field = "addresses")
