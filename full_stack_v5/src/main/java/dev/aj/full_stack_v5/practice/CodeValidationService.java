@@ -41,7 +41,7 @@ public class CodeValidationService {
         }
     }
 
-    public void validateAndUpdatePromotions(RestClient restClient) {
+    public void validateAndPurgeInvalidCode(RestClient restClient) {
         promotionRepository.findAll().forEach(promotion -> {
             if (promotion.getActive()) {
                 try {

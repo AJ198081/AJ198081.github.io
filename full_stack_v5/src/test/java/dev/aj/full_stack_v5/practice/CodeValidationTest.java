@@ -41,8 +41,8 @@ class CodeValidationTest {
 
     @Test
     @Order(1)
-    void verifyUpdatePromotions() {
-        codeValidationService.validateAndUpdatePromotions(restClient);
+    void verifyAndPurgeInvalidCode() {
+        codeValidationService.validateAndPurgeInvalidCode(restClient);
     }
 
     @RepeatedTest(value = 1000, name = "{currentRepetition}/{totalRepetitions}")
