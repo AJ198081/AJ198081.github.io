@@ -24,7 +24,11 @@ public class CORSOverride implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
-                .allowedOrigins(frontendHost, LOCALHOST_URL)
+                .allowedOrigins(
+                        frontendHost,
+                        LOCALHOST_URL,
+                        "http://192.168.5.11:5174",
+                        "http://172.29.144.1:5174")
                 .allowedMethods(
                         "GET",
                         "POST",
@@ -45,7 +49,12 @@ public class CORSOverride implements WebMvcConfigurer {
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
 
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of(frontendHost, LOCALHOST_URL));
+        corsConfiguration.setAllowedOrigins(
+                List.of(frontendHost,
+                        LOCALHOST_URL,
+                        "http://192.168.5.11:5174",
+                        "http://172.29.144.1:5174"))
+        ;
 
         corsConfiguration.setAllowedHeaders(
                 List.of("Authorization",

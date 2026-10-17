@@ -14,15 +14,18 @@ services:
 
 
   rabbit-mq:
-    image: 'rabbitmq:3-management'
+    image: 'rabbitmq:4.1-management'
     container_name: 'gateway_broker_container'
     restart: no
     environment:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=password
+      - deprecated_features.permit.queue_master_locator=true
     ports:
       - '5672:5672'
       - '15672:15672'
+#    volumes:
+#      - ./rabbitmq/90-permit-deprecated.conf:/etc/rabbitmq/conf.d/90-permit-deprecated.conf:ro
     networks:
       - config_server_network
 
