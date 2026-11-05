@@ -27,18 +27,18 @@ public class CodeValidationService {
         var response = fetchPromotionDetails(restClient, code);
 
         if (response.getStatusCode().is2xxSuccessful()) {
-            promotionRepository.save(PromotionEntity.builder()
-                    .promotionCode(code)
-                    .active(true)
-                    .build());
-            return true;
+            return persistCodeToDatabase(code, true);
         } else {
-            promotionRepository.save(PromotionEntity.builder()
-                    .promotionCode(code)
-                    .active(false)
-                    .build());
-            return false;
+            return persistCodeToDatabase(code, false);
         }
+    }
+
+    private boolean persistCodeToDatabase(String code, boolean isActive) {
+        promotionRepository.save(PromotionEntity.builder()
+                .promotionCode(code)
+                .active(isActive)
+                .build());
+        return isActive;
     }
 
     public void validateAndPurgeInvalidCode(RestClient restClient) {
